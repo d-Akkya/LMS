@@ -12,11 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from "@/features/api/authApi";
+import { toast } from "sonner";
 
 const Login = () => {
   const [signupInput, setSignupInput] = useState({
@@ -59,6 +60,33 @@ const Login = () => {
     const action = type === "signup" ? registerUser : loginUser;
     await action(inputData);
   };
+
+  useEffect(() => {
+    if (registerIsSuccess && registerData) {
+      // Handle successful registration, e.g., redirect or show a message
+      toast.success(registerData.message || "Signup successful!");
+    }
+    if (registerError) {
+      toast.error(
+        registerError.data?.message || "Signup failed. Please try again."
+      );
+    }
+    if (loginError) {
+      toast.error(
+        loginError.data?.message || "Login failed. Please try again."
+      );
+    }
+    if (loginIsSuccess && loginData) {
+      toast.success(loginData.message || "Login successful!");
+    }
+  }, [
+    loginIsLoading,
+    registerIsLoading,
+    loginData,
+    registerData,
+    loginError,
+    registerError,
+  ]);
 
   return (
     <div className="flex items-center w-full justify-center">
@@ -168,7 +196,8 @@ const Login = () => {
                 >
                   {loginIsLoading ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />Please wait
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Please wait
                     </>
                   ) : (
                     "Login"
