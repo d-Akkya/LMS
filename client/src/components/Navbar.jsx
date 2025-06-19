@@ -1,4 +1,4 @@
-import { School } from "lucide-react";
+import { Menu, School } from "lucide-react";
 import React from "react";
 import { Button } from "./ui/button";
 import {
@@ -12,9 +12,19 @@ import {
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import DarkMode from "@/DarkMode";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 const Navbar = () => {
-  const user = true;
+  const user = false;
 
   return (
     <div className="h-16 dark:bg-[#0A0A0A] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
@@ -64,8 +74,58 @@ const Navbar = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile device */}
+      <div className="flex md:hidden items-center justify-between h-full px-4">
+        <h1 className="text-2xl font-extrabold">SkillNova</h1>
+        <MobileNavbar />
+      </div>
     </div>
   );
 };
 
 export default Navbar;
+
+const MobileNavbar = () => {
+  const role = "student"; // or "student"
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button
+          size="icon"
+          className="rounded-md bg-gray-200 hover:bg-gray200 "
+          variant="outline"
+        >
+          <Menu />
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="flex flex-col">
+        <SheetHeader className="flex flex-row items-center justify-between mt-4">
+          <SheetTitle>SkillNova</SheetTitle>
+          <DarkMode />
+        </SheetHeader>
+        <Separator className="mr-2" />
+        <nav className="flex flex-col space-y-4 ml-4">
+          <span>Continue Learning</span>
+          <span>Edit Profile</span>
+          <span>Log out</span>
+        </nav>
+        {role === "instructor" ? (
+          <SheetFooter className="m-0">
+            <Button type="submit">Dashboard</Button>
+            <SheetClose asChild>
+              <Button variant="outline">Close</Button>
+            </SheetClose>
+          </SheetFooter>
+        ) : (
+          <SheetFooter className="m-0">
+            <SheetClose asChild>
+              <Button variant="outline">Close</Button>
+            </SheetClose>
+          </SheetFooter>
+        )}
+      </SheetContent>
+    </Sheet>
+  );
+};
