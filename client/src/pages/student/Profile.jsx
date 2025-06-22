@@ -14,11 +14,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import React from "react";
+import Course from "./Course";
+import { Link } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Profile = () => {
-  const isLoading = true;
+  const isLoading = false;
+  const profileIsLoading = true;
+  const enrolledCourses = [1, 2]; // Replace with actual data or state
 
-  return (
+  return profileIsLoading ? (
+    <ProfileSkeleton />
+  ) : (
     <div className="max-w-4xl mx-auto px-4 my-24">
       <h1 className="font-bold text-2xl text-center md:text-left">PROFILE</h1>
       <div className="flex flex-col md:flex-row items-center md:items-start gap-8 my-5">
@@ -119,8 +126,98 @@ const Profile = () => {
           </Dialog>
         </div>
       </div>
+      <div>
+        <h1 className="font-medium text-lg">Courses you're enrolled in</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-5">
+          {enrolledCourses.length === 0 ? (
+            <div>
+              <h1 className="w-screen">
+                You're not enrolled in any courses yet. Start exploring and
+                enroll in a course to begin your learning journey!
+              </h1>
+              <Button
+                className="dark:bg-gray-800 hover:bg-gray-200 text-blue-600 cursor-pointer"
+                variant="outline"
+              >
+                <Link to="/">Explore Courses</Link>
+              </Button>
+            </div>
+          ) : (
+            enrolledCourses.map((course, index) => <Course key={index} />)
+          )}
+        </div>
+      </div>
     </div>
   );
 };
 
 export default Profile;
+
+const ProfileSkeleton = () => {
+  return (
+    <div className="max-w-4xl mx-auto px-4 my-24">
+      {/* Profile Header */}
+      <h1 className="font-bold text-2xl text-center md:text-left">PROFILE</h1>
+
+      {/* Profile Section */}
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-8 my-5">
+        {/* Avatar */}
+        <div className="flex flex-col items-center">
+          <Skeleton className="h-24 w-24 md:h-32 md:w-32 rounded-full" />
+        </div>
+
+        {/* Profile Details */}
+        <div>
+          {/* Name */}
+          <div className="mb-2">
+            <div className="flex items-center gap-2 m-2">
+              <Skeleton className="h-6 w-12" />
+              <Skeleton className="h-6 w-32" />
+            </div>
+          </div>
+
+          {/* Email */}
+          <div className="mb-2">
+            <div className="flex items-center gap-2 m-2">
+              <Skeleton className="h-6 w-12" />
+              <Skeleton className="h-6 w-48" />
+            </div>
+          </div>
+
+          {/* Role */}
+          <div className="mb-2">
+            <div className="flex items-center gap-2 m-2">
+              <Skeleton className="h-6 w-10" />
+              <Skeleton className="h-6 w-20" />
+            </div>
+          </div>
+
+          {/* Edit Profile Button */}
+          <Skeleton className="h-9 w-24 mt-2 ml-2" />
+        </div>
+      </div>
+
+      {/* Courses Section */}
+      <div>
+        <Skeleton className="h-6 w-56 mb-5" />
+
+        {/* Course Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-5">
+          {/* Course Card Skeletons */}
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="border rounded-lg p-4 space-y-3">
+              <Skeleton className="h-32 w-full rounded" />
+              <Skeleton className="h-5 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+              <div className="flex justify-between items-center pt-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-8 w-20" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
