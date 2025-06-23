@@ -13,15 +13,54 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Course from "./Course";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLoadUserQuery } from "@/features/api/authApi";
+import {
+  useLoadUserQuery,
+  useUpdateUserMutation,
+} from "@/features/api/authApi";
+import { toast } from "sonner";
 
 const Profile = () => {
-  const { data, isLoading } = useLoadUserQuery();
-  
+  const [name, setName] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState("");
+
+  const { data, isLoading, refetch } = useLoadUserQuery();
+  const [
+    updateUser,
+    {
+      data: updateUserData,
+      isLoading: updateUserIsLoading,
+      error,
+      isSuccess,
+      isError,
+    },
+  ] = useUpdateUserMutation();
+
+  const onChangeHandler = (e) => {
+    const file = e.target.files?.[0];
+    if (file) setProfilePhoto(file);
+  };
+
+  const updateUserHandler = async () => {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("profilePhoto", profilePhoto);
+    await updateUser(formData);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+      toast.success(updateUserData.message || "Profile updated");
+    }
+    if (isError) {
+      toast.error(error.message || "Failed to update profile");
+    }
+  }, [error, updateUserData, isSuccess, isError]);
+
   if (!data || !data.user) return <ProfileSkeleton />;
   const { user } = data;
 
@@ -86,8 +125,8 @@ const Profile = () => {
                   <Label htmlFor="name-1">Name</Label>
                   <Input
                     type="text"
-                    id="name-1"
-                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="John Developer"
                     className="col-span-3"
                   />
@@ -97,6 +136,7 @@ const Profile = () => {
                   <Input
                     type="file"
                     accept="image/*"
+                    onChange={onChangeHandler}
                     className="col-span-3 cursor-pointer"
                   />
                 </div>
@@ -104,7 +144,7 @@ const Profile = () => {
               <DialogFooter>
                 <DialogClose asChild>
                   <Button
-                    disabled={isLoading}
+                    disabled={updateUserIsLoading}
                     variant="outline"
                     className={"cursor-pointer"}
                   >
@@ -112,11 +152,12 @@ const Profile = () => {
                   </Button>
                 </DialogClose>
                 <Button
-                  disabled={isLoading}
+                  disabled={updateUserIsLoading}
                   className={"cursor-pointer"}
                   type="submit"
+                  onClick={updateUserHandler}
                 >
-                  {isLoading ? (
+                  {updateUserIsLoading ? (
                     <>
                       <Loader2 className="mr-1 h-4 w-4 animate-spin" />
                       Please wait
