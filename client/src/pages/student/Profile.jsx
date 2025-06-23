@@ -13,15 +13,58 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Course from "./Course";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  useLoadUserQuery,
+  useUpdateUserMutation,
+} from "@/features/api/authApi";
+import { toast } from "sonner";
 
 const Profile = () => {
-  const isLoading = false;
-  const profileIsLoading = true;
-  const enrolledCourses = [1, 2]; // Replace with actual data or state
+  const [name, setName] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState("");
+
+  const { data, isLoading, refetch } = useLoadUserQuery();
+  const [
+    updateUser,
+    {
+      data: updateUserData,
+      isLoading: updateUserIsLoading,
+      error,
+      isSuccess,
+      isError,
+    },
+  ] = useUpdateUserMutation();
+
+  const onChangeHandler = (e) => {
+    const file = e.target.files?.[0];
+    if (file) setProfilePhoto(file);
+  };
+
+  const updateUserHandler = async () => {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("profilePhoto", profilePhoto);
+    await updateUser(formData);
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+      toast.success(updateUserData.message || "Profile updated");
+    }
+    if (isError) {
+      toast.error(error.message || "Failed to update profile");
+    }
+  }, [error, updateUserData, isSuccess, isError]);
+
+  if (!data || !data.user) return <ProfileSkeleton />;
+  const { user } = data;
+
+  const profileIsLoading = isLoading;
 
   return profileIsLoading ? (
     <ProfileSkeleton />
@@ -32,7 +75,7 @@ const Profile = () => {
         <div className="flex flex-col items-center">
           <Avatar className="h-24 w-24 md:h-32 md:w-32 cursor-pointer">
             <AvatarImage
-              src="https://github.com/evilrabbit.png"
+              src={user.photoUrl || "https://github.com/evilrabbit.png"}
               alt="@evilrabbit"
             />
             <AvatarFallback>ER</AvatarFallback>
@@ -43,7 +86,7 @@ const Profile = () => {
             <h2 className="font-semibold text-lg text-gray-900 dark:text-gray-100 m-2">
               Name:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                John Developer
+                {user.name}
               </span>
             </h2>
           </div>
@@ -51,7 +94,7 @@ const Profile = () => {
             <h2 className="font-semibold text-lg text-gray-900 dark:text-gray-100 m-2">
               Email:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                johndeveloper@gmail.com
+                {user.email}
               </span>
             </h2>
           </div>
@@ -59,7 +102,7 @@ const Profile = () => {
             <h2 className="font-semibold text-lg text-gray-900 dark:text-gray-100 m-2">
               Role:
               <span className="font-normal text-gray-700 dark:text-gray-300 ml-2">
-                Student
+                {user.role.toUpperCase()}
               </span>
             </h2>
           </div>
@@ -69,7 +112,7 @@ const Profile = () => {
                 Edit Profile
               </Button>
             </DialogTrigger>
-            <DialogContent className="">
+            <DialogContent>
               <DialogHeader>
                 <DialogTitle>Edit Profile</DialogTitle>
                 <DialogDescription>
@@ -82,8 +125,8 @@ const Profile = () => {
                   <Label htmlFor="name-1">Name</Label>
                   <Input
                     type="text"
-                    id="name-1"
-                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="John Developer"
                     className="col-span-3"
                   />
@@ -93,6 +136,7 @@ const Profile = () => {
                   <Input
                     type="file"
                     accept="image/*"
+                    onChange={onChangeHandler}
                     className="col-span-3 cursor-pointer"
                   />
                 </div>
@@ -100,7 +144,7 @@ const Profile = () => {
               <DialogFooter>
                 <DialogClose asChild>
                   <Button
-                    disabled={isLoading}
+                    disabled={updateUserIsLoading}
                     variant="outline"
                     className={"cursor-pointer"}
                   >
@@ -108,11 +152,12 @@ const Profile = () => {
                   </Button>
                 </DialogClose>
                 <Button
-                  disabled={isLoading}
+                  disabled={updateUserIsLoading}
                   className={"cursor-pointer"}
                   type="submit"
+                  onClick={updateUserHandler}
                 >
-                  {isLoading ? (
+                  {updateUserIsLoading ? (
                     <>
                       <Loader2 className="mr-1 h-4 w-4 animate-spin" />
                       Please wait
@@ -129,21 +174,23 @@ const Profile = () => {
       <div>
         <h1 className="font-medium text-lg">Courses you're enrolled in</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-5">
-          {enrolledCourses.length === 0 ? (
+          {user.enrolledCourses.length === 0 ? (
             <div>
               <h1 className="w-screen">
                 You're not enrolled in any courses yet. Start exploring and
                 enroll in a course to begin your learning journey!
               </h1>
               <Button
-                className="dark:bg-gray-800 hover:bg-gray-200 text-blue-600 cursor-pointer"
+                className="mt-3 dark:bg-gray-800 hover:bg-gray-200 text-blue-600 cursor-pointer"
                 variant="outline"
               >
                 <Link to="/">Explore Courses</Link>
               </Button>
             </div>
           ) : (
-            enrolledCourses.map((course, index) => <Course key={index} />)
+            user.enrolledCourses.map((course) => (
+              <Course course={course} key={course._id} />
+            ))
           )}
         </div>
       </div>
