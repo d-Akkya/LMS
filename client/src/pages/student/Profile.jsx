@@ -62,7 +62,7 @@ const Profile = () => {
   }, [error, updateUserData, isSuccess, isError]);
 
   if (!data || !data.user) return <ProfileSkeleton />;
-  const { user } = data;
+  const user = data && data.user;
 
   const profileIsLoading = isLoading;
 
