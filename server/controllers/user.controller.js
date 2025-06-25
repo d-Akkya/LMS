@@ -82,7 +82,7 @@ export const logout = async (_, res) => {
     return res
       .status(200)
       .cookie("token", "", { maxAge: 0 })
-      .json({ success: true, message: "Logged out successfully" });
+      .json({ success: true, message: "Logged out successfully." });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
