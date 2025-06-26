@@ -25,22 +25,23 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutUserMutation } from "@/features/api/authApi";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const user = true;
+  const { user } = useSelector((store) => store.auth || {});
   const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
 
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
     await logoutUser();
-    navigate("/login");
   };
 
   // Show success message when user logs out
   useEffect(() => {
     if (isSuccess) {
       toast.success(data.message || "User logged out.");
+      navigate("/login");
     }
   }, [isSuccess]);
 
@@ -60,7 +61,7 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Avatar className="rounded-md h-[34px] w-[34px] cursor-pointer">
                   <AvatarImage
-                    src="https://github.com/evilrabbit.png"
+                    src={user?.photoUrl || "https://github.com/evilrabbit.png"}
                     alt="@evilrabbit"
                   />
                   <AvatarFallback>ER</AvatarFallback>
@@ -75,7 +76,9 @@ const Navbar = () => {
                   <DropdownMenuItem>
                     <Link to="profile">Edit Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={logoutHandler}>Log out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={logoutHandler}>
+                    Log out
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Dashboard</DropdownMenuItem>
@@ -83,14 +86,14 @@ const Navbar = () => {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="outline" className="w-[78px]">
+              <Button variant="outline" className="w-[78px] cursor-pointer">
                 Signup
               </Button>
               <Button
                 variant="outline"
-                className="w-[78px] bg-black text-white"
+                className="w-[78px] bg-black text-white cursor-pointer"
               >
-                Login
+                <Link to={"/login"}>Login</Link>
               </Button>
             </div>
           )}
