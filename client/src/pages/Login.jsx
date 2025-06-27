@@ -71,17 +71,15 @@ const Login = () => {
     }
     if (registerError) {
       toast.error(
-        registerError.data?.message || "Signup failed. Please try again."
-      );
-    }
-    if (loginError) {
-      toast.error(
-        loginError.data?.message || "Login failed. Please try again."
+        registerError.data.message || "Signup failed. Please try again."
       );
     }
     if (loginIsSuccess && loginData) {
       toast.success(loginData.message || "Login successful!");
       navigate("/"); // Redirect to home page after successful login
+    }
+    if (loginError) {
+      toast.error(loginError.data.message || "Login failed. Please try again.");
     }
   }, [
     loginIsLoading,

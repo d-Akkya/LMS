@@ -80,20 +80,29 @@ const Navbar = () => {
                     Log out
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                {user.role === "instructor" && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="outline" className="w-[78px] cursor-pointer">
+              <Button
+                variant="outline"
+                onClick={() => navigate("/login")}
+                className="w-[78px] cursor-pointer"
+              >
                 Signup
               </Button>
               <Button
                 variant="outline"
+                onClick={() => navigate("/login")}
                 className="w-[78px] bg-black text-white cursor-pointer"
               >
-                <Link to={"/login"}>Login</Link>
+                Login
               </Button>
             </div>
           )}
