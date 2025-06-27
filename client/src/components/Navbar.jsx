@@ -90,11 +90,16 @@ const Navbar = () => {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="outline" className="w-[78px] cursor-pointer">
+              <Button
+                variant="outline"
+                onClick={() => navigate("/login")}
+                className="w-[78px] cursor-pointer"
+              >
                 Signup
               </Button>
               <Button
                 variant="outline"
+                onClick={() => navigate("/login")}
                 className="w-[78px] bg-black text-white cursor-pointer"
               >
                 Login
