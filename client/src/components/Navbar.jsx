@@ -80,8 +80,12 @@ const Navbar = () => {
                     Log out
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                {user.role === "instructor" && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -93,7 +97,7 @@ const Navbar = () => {
                 variant="outline"
                 className="w-[78px] bg-black text-white cursor-pointer"
               >
-                <Link to={"/login"}>Login</Link>
+                Login
               </Button>
             </div>
           )}
