@@ -15,13 +15,13 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Course from "./Course";
-import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useLoadUserQuery,
   useUpdateUserMutation,
 } from "@/features/api/authApi";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -52,6 +52,10 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
     if (isSuccess) {
       refetch();
       toast.success(updateUserData.message || "Profile updated");
@@ -65,6 +69,7 @@ const Profile = () => {
   const user = data && data.user;
 
   const profileIsLoading = isLoading;
+  const navigate = useNavigate();
 
   return profileIsLoading ? (
     <ProfileSkeleton />
@@ -75,7 +80,7 @@ const Profile = () => {
         <div className="flex flex-col items-center">
           <Avatar className="h-24 w-24 md:h-32 md:w-32 cursor-pointer">
             <AvatarImage
-              src={user.photoUrl || "https://github.com/evilrabbit.png"}
+              src={user?.photoUrl || "https://github.com/evilrabbit.png"}
               alt="@evilrabbit"
             />
             <AvatarFallback>ER</AvatarFallback>
@@ -183,8 +188,9 @@ const Profile = () => {
               <Button
                 className="mt-3 dark:bg-gray-800 hover:bg-gray-200 text-blue-600 cursor-pointer"
                 variant="outline"
+                onClick={() => navigate("/")}
               >
-                <Link to="/">Explore Courses</Link>
+                Explore Courses
               </Button>
             </div>
           ) : (
