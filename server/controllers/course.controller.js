@@ -1,6 +1,6 @@
 import { Course } from "../models/course.model.js";
 
-export const createCourse = async (req, req) => {
+export const createCourse = async (req, res) => {
   try {
     const { courseTitle, category } = req.body;
     if (!courseTitle || !category) {
