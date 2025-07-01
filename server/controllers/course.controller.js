@@ -10,7 +10,7 @@ export const createCourse = async (req, res) => {
       });
     }
 
-    const course = new Course.create({
+    const course = await Course.create({
       courseTitle,
       category,
       creator: req.id,
