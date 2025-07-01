@@ -21,7 +21,7 @@ const courseSchema = new mongoose.Schema(
       enum: ["Beginner", "Intermediate", "Advanced"],
     },
     coursePrice: {
-      type: Number,
+      type: String,
       default: "Free",
     },
     courseThumbnail: {
