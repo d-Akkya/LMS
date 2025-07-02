@@ -19,13 +19,37 @@ export const createCourse = async (req, res) => {
     return res.status(201).json({
       course,
       success: true,
-      message: "Course created.",
+      message: "Course created",
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Failed to create course",
+      message: "Failed to create course.",
+    });
+  }
+};
+
+export const getCreatorCourses = async (req, res) => {
+  try {
+    const userId = req.id;
+    const courses = await Course.find({ creator: userId });
+    if (!courses) {
+      return res.status(404).json({
+        courses: [],
+        message: "Course not found",
+      });
+    }
+    return res.status(200).json({
+      courses,
+      success: true,
+      message: "Courses fetched successfully.",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch courses.",
     });
   }
 };
