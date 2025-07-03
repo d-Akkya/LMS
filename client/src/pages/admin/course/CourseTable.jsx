@@ -81,7 +81,7 @@ const CourseTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.courses.map((course) => (
+          {data?.courses?.map((course) => (
             <TableRow key={course._id}>
               <TableCell className="font-medium">
                 {course?.coursePrice || "Free"}
@@ -97,7 +97,11 @@ const CourseTable = () => {
               </TableCell>
               <TableCell>{course.courseTitle}</TableCell>
               <TableCell className="text-right">
-                <Button size={"sm"} variant={"ghost"}>
+                <Button
+                  size={"sm"}
+                  variant={"ghost"}
+                  onClick={() => navigate(`${course._id}`)}
+                >
                   <Edit2 />
                 </Button>
               </TableCell>
