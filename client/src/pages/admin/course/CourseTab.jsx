@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -37,6 +37,10 @@ const CourseTab = () => {
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
+  };
+
+  const selectCategory = (value) => {
+    setInput({ ...input, category: value });
   };
 
   const isPublished = true;
@@ -88,7 +92,7 @@ const CourseTab = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Label>Category</Label>
-                <Select>
+                <Select onValueChange={selectCategory}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
