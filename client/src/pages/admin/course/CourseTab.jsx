@@ -28,6 +28,7 @@ const CourseTab = () => {
     subtitle: "",
     description: "",
     category: "",
+    courseLevel: "",
     coursePrice: "",
     courseThumbnail: "",
   });
@@ -41,6 +42,9 @@ const CourseTab = () => {
 
   const selectCategory = (value) => {
     setInput({ ...input, category: value });
+  };
+  const selectCourseLevel = (value) => {
+    setInput({ ...input, courseLevel: value });
   };
 
   const isPublished = true;
@@ -92,7 +96,7 @@ const CourseTab = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Label>Category</Label>
-                <Select onValueChange={selectCategory}>
+                <Select onValueChange={selectCourseCategory}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
@@ -123,7 +127,7 @@ const CourseTab = () => {
               </div>
               <div>
                 <Label>Course Level</Label>
-                <Select>
+                <Select onValueChange={selectCourseLevel}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a course level" />
                   </SelectTrigger>
