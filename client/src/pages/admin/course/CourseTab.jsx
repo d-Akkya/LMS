@@ -96,7 +96,7 @@ const CourseTab = () => {
                 type="text"
                 name="subtitle"
                 value={input.subtitle}
-                onChage={changeEventHandler}
+                onChange={changeEventHandler}
                 placeholder="eg. A comprehensive introduction to programming"
               />
             </div>
