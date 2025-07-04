@@ -32,6 +32,7 @@ const CourseTab = () => {
     coursePrice: "",
     courseThumbnail: "",
   });
+  const [previewThumbnail, setPreviewThumbnail] = useState("");
 
   const navigate = useNavigate();
 
@@ -46,9 +47,19 @@ const CourseTab = () => {
   const selectCourseLevel = (value) => {
     setInput({ ...input, courseLevel: value });
   };
+  // get file
+  const selectThumbnail = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setInput({ ...input, courseThumbnail: file });
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => setPreviewThumbnail(fileReader.result);
+      fileReader.readAsDataURL(file);
+    }
+  };
 
   const isPublished = true;
-  const isLoading = true;
+  const isLoading = false;
 
   return (
     <Card>
@@ -96,7 +107,7 @@ const CourseTab = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Label>Category</Label>
-                <Select onValueChange={selectCourseCategory}>
+                <Select onValueChange={selectCategory}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
@@ -158,11 +169,16 @@ const CourseTab = () => {
               <Input
                 type="file"
                 accept="image/*"
-                name="courseThumbnail"
-                value={input.courseThumbnail}
-                onChange={changeEventHandler}
+                onChange={selectThumbnail}
                 className={"w-fit"}
               />
+              {previewThumbnail && (
+                <img
+                  src={previewThumbnail}
+                  alt="Course Thumbnail"
+                  className="w-64 my-2"
+                />
+              )}
             </div>
             <div className="flex gap-2">
               <Button
