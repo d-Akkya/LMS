@@ -145,6 +145,7 @@ const Login = () => {
                 <Button
                   disabled={registerIsLoading}
                   onClick={() => handleRegistration("signup")}
+                  className="cursor-pointer"
                 >
                   {registerIsLoading ? (
                     <>
@@ -195,6 +196,7 @@ const Login = () => {
                 <Button
                   disabled={loginIsLoading}
                   onClick={() => handleRegistration("login")}
+                  className="cursor-pointer"
                 >
                   {loginIsLoading ? (
                     <>
