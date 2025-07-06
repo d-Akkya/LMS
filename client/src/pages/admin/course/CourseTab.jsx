@@ -59,6 +59,10 @@ const CourseTab = () => {
     }
   };
 
+  const updateCourseHandler = () => {
+    console.log(input);
+  };
+
   const isPublished = true;
   const isLoading = false;
 
@@ -189,7 +193,14 @@ const CourseTab = () => {
               >
                 Cancel
               </Button>
-              <Button disabled={isLoading} className="cursor-pointer">
+              <Button
+                disabled={isLoading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  updateCourseHandler();
+                }}
+                className="cursor-pointer"
+              >
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-1 h-4 w-4 animate-spin" />
