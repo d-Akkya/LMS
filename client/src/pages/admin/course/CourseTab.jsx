@@ -47,6 +47,7 @@ const CourseTab = () => {
   const selectCourseLevel = (value) => {
     setInput({ ...input, courseLevel: value });
   };
+
   // get file
   const selectThumbnail = (e) => {
     const file = e.target.files?.[0];
@@ -71,10 +72,10 @@ const CourseTab = () => {
           </CardDescription>
         </div>
         <div className="space-x-2">
-          <Button variant="outline">
+          <Button variant="outline" className="cursor-pointer">
             {isPublished ? "Unpublish" : "Publish"}
           </Button>
-          <Button>Remove Course</Button>
+          <Button className="cursor-pointer">Remove Course</Button>
         </div>
       </CardHeader>
       <CardContent>
@@ -86,7 +87,7 @@ const CourseTab = () => {
                 type="text"
                 name="courseTitle"
                 value={input.courseTitle}
-                onChage={changeEventHandler}
+                onChange={changeEventHandler}
                 placeholder="eg. Intro to Programming"
               />
             </div>
