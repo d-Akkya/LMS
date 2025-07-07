@@ -18,9 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEditCourseMutation } from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const CourseTab = () => {
   const [input, setInput] = useState({
@@ -34,7 +36,12 @@ const CourseTab = () => {
   });
   const [previewThumbnail, setPreviewThumbnail] = useState("");
 
+  const [editCourse, { data, isLoading, isSuccess, error }] =
+    useEditCourseMutation();
+
   const navigate = useNavigate();
+  const params = useParams();
+  const courseId = params.courseId;
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -59,12 +66,30 @@ const CourseTab = () => {
     }
   };
 
-  const updateCourseHandler = () => {
-    console.log(input);
+  const updateCourseHandler = async () => {
+    const formData = new FormData();
+    formData.append("courseTitle", input.courseTitle);
+    formData.append("subtitle", input.subtitle);
+    formData.append("description", input.description);
+    formData.append("category", input.category);
+    formData.append("courseLevel", input.courseLevel);
+    formData.append("coursePrice", input.coursePrice);
+    formData.append("courseThumbnail", input.courseThumbnail);
+
+    await editCourse({formData, courseId});
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message || "Course updated.");
+      navigate("/admin/course");
+    }
+    if (error){
+
+    }
+  }, [isSuccess, error]);
+
   const isPublished = true;
-  const isLoading = false;
 
   return (
     <Card>
