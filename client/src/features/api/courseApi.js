@@ -28,13 +28,18 @@ export const courseApi = createApi({
     }),
 
     editCourse: builder.mutation({
-      query: ({formData, courseId}) => ({
+      query: ({ formData, courseId }) => ({
         url: `/${courseId}`,
         method: "PUT",
         body: formData,
       }),
+      invalidatesTags: ["Refetch_Creator_Course"],
     }),
   }),
 });
 
-export const { useCreateCourseMutation, useGetCreatorCourseQuery, useEditCourseMutation } = courseApi;
+export const {
+  useCreateCourseMutation,
+  useGetCreatorCourseQuery,
+  useEditCourseMutation,
+} = courseApi;
