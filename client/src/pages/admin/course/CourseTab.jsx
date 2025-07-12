@@ -18,13 +18,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEditCourseMutation } from "@/features/api/courseApi";
+import {
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+} from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const CourseTab = () => {
+  const navigate = useNavigate();
+  const params = useParams();
+  const courseId = params.courseId;
+
   const [input, setInput] = useState({
     courseTitle: "",
     subtitle: "",
@@ -36,12 +43,25 @@ const CourseTab = () => {
   });
   const [previewThumbnail, setPreviewThumbnail] = useState("");
 
+  const { data: courseByIdData, isLoading: courseByIdLoading } =
+    useGetCourseByIdQuery(courseId);
+  const course = courseByIdData?.course;
+  useEffect(() => {
+    if (course) {
+      setInput({
+        courseTitle: course.courseTitle,
+        subtitle: course.subtitle,
+        description: course.description,
+        category: course.category,
+        courseLevel: course.courseLevel,
+        coursePrice: Number(course.coursePrice),
+        courseThumbnail: course.courseThumbnail,
+      });
+    }
+  }, [course]);
+
   const [editCourse, { data, isLoading, isSuccess, error }] =
     useEditCourseMutation();
-
-  const navigate = useNavigate();
-  const params = useParams();
-  const courseId = params.courseId;
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -76,7 +96,7 @@ const CourseTab = () => {
     formData.append("coursePrice", input.coursePrice);
     formData.append("courseThumbnail", input.courseThumbnail);
 
-    await editCourse({formData, courseId});
+    await editCourse({ formData, courseId });
   };
 
   useEffect(() => {
@@ -84,8 +104,7 @@ const CourseTab = () => {
       toast.success(data?.message || "Course updated.");
       navigate("/admin/course");
     }
-    if (error){
-
+    if (error) {
     }
   }, [isSuccess, error]);
 
