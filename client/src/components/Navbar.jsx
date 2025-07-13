@@ -91,7 +91,10 @@ const Navbar = () => {
                   <DropdownMenuItem>
                     <Link to="profile">Edit Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={logoutHandler}>
+                  <DropdownMenuItem
+                    onClick={logoutHandler}
+                    className="cursor-pointer"
+                  >
                     Log out
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
