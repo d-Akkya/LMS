@@ -33,6 +33,12 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
+  // Handle signup click
+  const signupClickHandler = () => {
+    navigate("/login?tab=signup");
+  };
+
+  // Logout user when user clicks on logout button
   const logoutHandler = async () => {
     await logoutUser();
   };
@@ -101,14 +107,14 @@ const Navbar = () => {
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
-                onClick={() => navigate("/login")}
+                onClick={signupClickHandler}
                 className="w-[78px] cursor-pointer"
               >
                 Signup
               </Button>
               <Button
                 variant="outline"
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/login?tab=login")}
                 className="w-[78px] bg-black text-white cursor-pointer"
               >
                 Login
