@@ -1,4 +1,4 @@
-import { AppWindowIcon, CodeIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +18,7 @@ import {
   useRegisterUserMutation,
 } from "@/features/api/authApi";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Login = () => {
   const [signupInput, setSignupInput] = useState({
@@ -27,6 +27,17 @@ const Login = () => {
     password: "",
   });
   const [loginInput, setLoginInput] = useState({ email: "", password: "" });
+
+  // open tab on click value (signup / login)
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState("login");
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "signup" || tab === "login") {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   const [
     registerUser,
@@ -93,10 +104,14 @@ const Login = () => {
   return (
     <div className="flex items-center w-full justify-center mt-24">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <Tabs defaultValue="login">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full">
-            <TabsTrigger value="signup">Signup</TabsTrigger>
-            <TabsTrigger value="login">Login</TabsTrigger>
+            <TabsTrigger value="signup" className="cursor-pointer">
+              Signup
+            </TabsTrigger>
+            <TabsTrigger value="login" className={"cursor-pointer"}>
+              Login
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="signup">
             <Card>
