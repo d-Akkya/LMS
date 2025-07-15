@@ -60,7 +60,7 @@ export const editCourse = async (req, res) => {
     const courseId = req.params.courseId;
     const {
       courseTitle,
-      subtitle,
+      subTitle,
       description,
       category,
       courseLevel,
@@ -90,7 +90,7 @@ export const editCourse = async (req, res) => {
     // update course data
     const updateData = {
       courseTitle,
-      subtitle,
+      subTitle,
       description,
       category,
       courseLevel,
@@ -104,7 +104,7 @@ export const editCourse = async (req, res) => {
 
     return res.status(200).json({
       course,
-      message: "Course updated successfully.",
+      message: "Course details have been modified.",
     });
   } catch (error) {
     console.log;
