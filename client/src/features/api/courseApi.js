@@ -40,6 +40,7 @@ export const courseApi = createApi({
         url: `/${courseId}`,
         method: "GET",
       }),
+      providesTags: ["Refetch_Creator_Course"],
     }),
   }),
 });
