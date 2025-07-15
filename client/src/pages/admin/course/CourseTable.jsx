@@ -101,6 +101,7 @@ const CourseTable = () => {
                   size={"sm"}
                   variant={"ghost"}
                   onClick={() => navigate(`${course._id}`)}
+                  className={"cursor-pointer"}
                 >
                   <Edit2 />
                 </Button>
