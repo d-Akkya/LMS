@@ -72,11 +72,11 @@ const AddCourse = () => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Category</SelectLabel>
-                <SelectItem value="Nextjs">Nextjs</SelectItem>
-                <SelectItem value="Docker">Docker</SelectItem>
-                <SelectItem value="AWS">AWS</SelectItem>
+                <SelectItem value="HTML">HTML</SelectItem>
+                <SelectItem value="CSS">CSS</SelectItem>
                 <SelectItem value="JavaScript">JavaScript</SelectItem>
                 <SelectItem value="React">React</SelectItem>
+                <SelectItem value="Nextjs">Nextjs</SelectItem>
                 <SelectItem value="Nodejs">Nodejs</SelectItem>
                 <SelectItem value="Expressjs">Expressjs</SelectItem>
                 <SelectItem value="MongoDB">MongoDB</SelectItem>
@@ -86,10 +86,11 @@ const AddCourse = () => {
                 <SelectItem value="Backend Development">
                   Backend Development
                 </SelectItem>
+                <SelectItem value="AWS">AWS</SelectItem>
+                <SelectItem value="Docker">Docker</SelectItem>
+                <SelectItem value="DevOps">DevOps</SelectItem>
                 <SelectItem value="Python">Python</SelectItem>
                 <SelectItem value="Data Science">Data Science</SelectItem>
-                <SelectItem value="HTML">HTML</SelectItem>
-                <SelectItem value="CSS">CSS</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
