@@ -34,7 +34,7 @@ const CourseTab = () => {
 
   const [input, setInput] = useState({
     courseTitle: "",
-    subtitle: "",
+    subTitle: "",
     description: "",
     category: "",
     courseLevel: "",
@@ -50,7 +50,7 @@ const CourseTab = () => {
     if (course) {
       setInput({
         courseTitle: course.courseTitle,
-        subtitle: course.subtitle,
+        subTitle: course.subTitle,
         description: course.description,
         category: course.category,
         courseLevel: course.courseLevel,
@@ -75,7 +75,7 @@ const CourseTab = () => {
     setInput({ ...input, courseLevel: value });
   };
 
-  // get file
+  // get file and set preview thumbnail
   const selectThumbnail = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -89,7 +89,7 @@ const CourseTab = () => {
   const updateCourseHandler = async () => {
     const formData = new FormData();
     formData.append("courseTitle", input.courseTitle);
-    formData.append("subtitle", input.subtitle);
+    formData.append("subTitle", input.subTitle);
     formData.append("description", input.description);
     formData.append("category", input.category);
     formData.append("courseLevel", input.courseLevel);
@@ -109,6 +109,8 @@ const CourseTab = () => {
   }, [isSuccess, error]);
 
   const isPublished = true;
+
+  if (courseByIdLoading) return <Loader2 className="animate-spin h-4 w-4" />;
 
   return (
     <Card>
@@ -143,8 +145,8 @@ const CourseTab = () => {
               <Label>Subtitle</Label>
               <Input
                 type="text"
-                name="subtitle"
-                value={input.subtitle}
+                name="subTitle"
+                value={input.subTitle}
                 onChange={changeEventHandler}
                 placeholder="eg. A comprehensive introduction to programming"
               />
@@ -156,18 +158,18 @@ const CourseTab = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Label>Category</Label>
-                <Select onValueChange={selectCategory}>
+                <Select onValueChange={selectCategory} value={input.category}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Category</SelectLabel>
-                      <SelectItem value="Nextjs">Nextjs</SelectItem>
-                      <SelectItem value="Docker">Docker</SelectItem>
-                      <SelectItem value="AWS">AWS</SelectItem>
+                      <SelectItem value="HTML">HTML</SelectItem>
+                      <SelectItem value="CSS">CSS</SelectItem>
                       <SelectItem value="JavaScript">JavaScript</SelectItem>
                       <SelectItem value="React">React</SelectItem>
+                      <SelectItem value="Nextjs">Nextjs</SelectItem>
                       <SelectItem value="Nodejs">Nodejs</SelectItem>
                       <SelectItem value="Expressjs">Expressjs</SelectItem>
                       <SelectItem value="MongoDB">MongoDB</SelectItem>
@@ -177,17 +179,21 @@ const CourseTab = () => {
                       <SelectItem value="Backend Development">
                         Backend Development
                       </SelectItem>
+                      <SelectItem value="AWS">AWS</SelectItem>
+                      <SelectItem value="Docker">Docker</SelectItem>
+                      <SelectItem value="DevOps">DevOps</SelectItem>
                       <SelectItem value="Python">Python</SelectItem>
                       <SelectItem value="Data Science">Data Science</SelectItem>
-                      <SelectItem value="HTML">HTML</SelectItem>
-                      <SelectItem value="CSS">CSS</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <Label>Course Level</Label>
-                <Select onValueChange={selectCourseLevel}>
+                <Select
+                  onValueChange={selectCourseLevel}
+                  value={input.courseLevel}
+                >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a course level" />
                   </SelectTrigger>
@@ -221,9 +227,9 @@ const CourseTab = () => {
                 onChange={selectThumbnail}
                 className={"w-fit"}
               />
-              {previewThumbnail && (
+              {(previewThumbnail || input.courseThumbnail) && (
                 <img
-                  src={previewThumbnail}
+                  src={previewThumbnail || input.courseThumbnail}
                   alt="Course Thumbnail"
                   className="w-64 my-2"
                 />
@@ -239,10 +245,7 @@ const CourseTab = () => {
               </Button>
               <Button
                 disabled={isLoading}
-                onClick={(e) => {
-                  e.preventDefault();
-                  updateCourseHandler();
-                }}
+                onClick={updateCourseHandler}
                 className="cursor-pointer"
               >
                 {isLoading ? (
