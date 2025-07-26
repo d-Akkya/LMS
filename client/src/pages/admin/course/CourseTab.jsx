@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   useEditCourseMutation,
   useGetCourseByIdQuery,
@@ -110,7 +111,7 @@ const CourseTab = () => {
 
   const isPublished = true;
 
-  if (courseByIdLoading) return <Loader2 className="animate-spin h-4 w-4" />;
+  if (courseByIdLoading) return <CourseTabSkeleton />;
 
   return (
     <Card>
@@ -266,3 +267,75 @@ const CourseTab = () => {
 };
 
 export default CourseTab;
+
+const CourseTabSkeleton = () => {
+  return (
+    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+      {/* Card Header */}
+      <div className="flex flex-row justify-between p-6">
+        <div>
+          <div className="mb-2">
+            <Skeleton className="h-6 w-48" />
+          </div>
+          <Skeleton className="h-4 w-80" />
+        </div>
+        <div className="space-x-2">
+          <Skeleton className="inline-block h-10 w-20" />
+          <Skeleton className="inline-block h-10 w-28" />
+        </div>
+      </div>
+
+      {/* Card Content */}
+      <div className="p-6 pt-0">
+        <div className="space-y-4 mt-5">
+          {/* Title Field */}
+          <div>
+            <Skeleton className="h-4 w-8 mb-1" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+
+          {/* Subtitle Field */}
+          <div>
+            <Skeleton className="h-4 w-12 mb-1" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+
+          {/* Description Field */}
+          <div>
+            <Skeleton className="h-4 w-16 mb-1" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+
+          {/* Category, Course Level, Price Row */}
+          <div className="flex items-center justify-between">
+            <div>
+              <Skeleton className="h-4 w-12 mb-1" />
+              <Skeleton className="h-10 w-[180px]" />
+            </div>
+            <div>
+              <Skeleton className="h-4 w-20 mb-1" />
+              <Skeleton className="h-10 w-[180px]" />
+            </div>
+            <div>
+              <Skeleton className="h-4 w-20 mb-1" />
+              <Skeleton className="h-10 w-20" />
+            </div>
+          </div>
+
+          {/* Course Thumbnail */}
+          <div>
+            <Skeleton className="h-4 w-24 mb-1" />
+            <Skeleton className="h-10 w-32 mb-1" />
+            <Skeleton className="w-64 h-36 my-2" />
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Skeleton className="h-10 w-16" />
+            <Skeleton className="h-10 w-12" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
